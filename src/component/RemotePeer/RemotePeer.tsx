@@ -44,4 +44,4 @@ const RemotePeer = ({ peerId }: Props) => {
   );
 };
 
-export default RemotePeer;
+export default React.memo(RemotePeer);
