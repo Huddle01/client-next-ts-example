@@ -6,18 +6,40 @@ type Props = {
 };
 
 const RemotePeer = ({ peerId }: Props) => {
-  const { track } = useRemoteVideo({ peerId });
+  const { stream } = useRemoteVideo({ peerId });
   const vidRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (track && vidRef.current) {
-      vidRef.current.srcObject = new MediaStream([track]);
+    console.log({ RemotePeer: peerId });
+
+    if (stream && vidRef.current) {
+      console.log("here 1");
+
+      vidRef.current.srcObject = stream;
+
+      vidRef.current?.play();
+      // vidRef.current.onloadedmetadata = async () => {
+      //   try {
+      //     console.log("here 2");
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // };
+
+      vidRef.current.onerror = () => {
+        console.error("videoCard() | Error is hapenning...");
+      };
     }
-  }, [track]);
+  }, [stream]);
 
   return (
     <div>
-      <video ref={vidRef} />
+      <video
+        ref={vidRef}
+        autoPlay
+        muted
+        className="border-2 rounded-xl border-blue-400 aspect-video"
+      />
     </div>
   );
 };

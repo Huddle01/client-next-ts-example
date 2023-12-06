@@ -13,6 +13,8 @@ const huddleClient = new HuddleClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  console.log("render");
+
   return (
     <HuddleProvider client={huddleClient}>
       <Component {...pageProps} />

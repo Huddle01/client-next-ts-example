@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
 import {
   useLocalPeer,
@@ -8,10 +7,15 @@ import {
 } from "@huddle01/react/hooks";
 import { useEffect, useRef } from "react";
 import RemotePeer from "@/component/RemotePeer/RemotePeer";
+import { AccessToken, Role } from "@huddle01/server-sdk/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+type Props = {
+  token: string;
+};
+
+export default function Home({ token }: Props) {
   const { joinRoom } = useRoom({
     onJoin: (room) => {
       console.log("onJoin", room);
@@ -32,6 +36,8 @@ export default function Home() {
     }
   }, [track]);
 
+  console.log({ peerIds });
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -48,8 +54,7 @@ export default function Home() {
             onClick={async () => {
               await joinRoom({
                 roomId: "kto-qnki-bwd",
-                token:
-                  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb29tSWQiOiJrdG8tcW5raS1id2QiLCJyb2xlIjoiaG9zdCIsInBlcm1pc3Npb25zIjp7ImFkbWluIjp0cnVlLCJjYW5Db25zdW1lIjp0cnVlLCJjYW5Qcm9kdWNlIjp0cnVlLCJjYW5Qcm9kdWNlU291cmNlcyI6eyJjYW0iOnRydWUsIm1pYyI6dHJ1ZSwic2NyZWVuIjp0cnVlfSwiY2FuU2VuZERhdGEiOnRydWUsImNhblJlY3ZEYXRhIjp0cnVlLCJjYW5VcGRhdGVNZXRhZGF0YSI6dHJ1ZX0sIm1ldGFkYXRhIjoie1wid2FsbGV0QWRkcmVzc1wiOlwiYXhpdC5ldGhcIn0iLCJwZWVySWQiOiJwZWVySWQtMjhQN2RLV25WLVV5dTVCdE1CbldRIiwicHVycG9zZSI6IlNESyIsInJvb21JbmZvIjp7InJvb21Mb2NrZWQiOmZhbHNlLCJtdXRlT25FbnRyeSI6ZmFsc2UsInJvb21UeXBlIjoiVklERU8iLCJ2aWRlb09uRW50cnkiOmZhbHNlfSwiaWF0IjoxNzAxODc4NjQ0LCJleHAiOjE3MDE4ODk0NDQsImlzcyI6Imh1ZGRsZTAxIn0.Q13XfiCBohZKTHXglp1s1WIolX62AfiGnlj3xtqdh05PfY7iZwoDIzhGFF1Ri1kGpHQMFNyZsZx65InOBY3q2rNtf-nI3YM1DueH3tZ6sfc3Q_YKZyXJcgMHcTbqa-GG_N2jvABqHRbUXDwLsF4q24CtIzeVZvMyI2HB9vFs1TQcoG_wU2Sp0f7QMfvnKJcWRKCH07kxvjjzgpJ-Mkq0R8JZB96cS9KL-rtJIHEQmnJvW_SxP6_j0rqAkfDx59JTuCmj6PNILIaA6EuRfO9aHPXGHJjsj69hlCuOixCN6OtZImvLC1hy5YzauqlyZ0dPA4n1LaUowS24ATliyv6Vz9UwXarekZpU4iGIMwGzmnpyKd6vsENxs_Vn8n0KA86o828zMpL7hPdmiDeDxnX_fXFie4Hpqa5nzwG-cp2msUZjPU8bnLCRnDdK4MFP9ZN-nyByYSnRXAbn3t1AgJKWw9-QplktKRkdjyoFkGLbSnugrfDPIHPwUpIKEBp0ckWrM5REwrjg6iKgXZgWQAcQGCL7CpiDf_lhSydL2PwDMq51udc9wFQeSDeq1AYUXpyfLM3dSquFcQBNI0cgXlfVOKqlVEh21X84n76Z1MXdMgEQK9Kl4aWj0r9KcJHWR8E6TNHLu73fjoi-eWOz4n-DlnZ81GgkPHa-w-pMDyUOdkM",
+                token,
               });
             }}
           >
@@ -76,14 +81,52 @@ export default function Home() {
           priority
         /> */}
 
-        <video ref={videoRef} autoPlay muted />
+        <video
+          ref={videoRef}
+          className="w-1/2 mx-auto border-2 rounded-xl border-blue-400"
+          autoPlay
+          muted
+        />
       </div>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        {peerIds.map((peerId) => (
-          <RemotePeer key={peerId} peerId={peerId} />
-        ))}
+      <div className="mb-32 grid gap-2 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+        {peerIds.map((peerId) =>
+          peerId ? <RemotePeer key={peerId} peerId={peerId} /> : null
+        )}
       </div>
     </main>
   );
 }
+
+export const getServerSideProps = async () => {
+  const accessToken = new AccessToken({
+    apiKey: process.env.API_KEY!,
+    roomId: process.env.ROOM_ID!,
+    role: Role.HOST,
+    permissions: {
+      admin: true,
+      canConsume: true,
+      canProduce: true,
+      canProduceSources: {
+        cam: true,
+        mic: true,
+        screen: true,
+      },
+      canRecvData: true,
+      canSendData: true,
+      canUpdateMetadata: true,
+    },
+    options: {
+      metadata: {
+        // you can add any custom attributes here which you want to associate with the user
+        walletAddress: "axit.eth",
+      },
+    },
+  });
+
+  const token = await accessToken.toJwt();
+
+  return {
+    props: { token },
+  };
+};
