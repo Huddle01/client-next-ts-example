@@ -25,16 +25,16 @@ export default function Home({ token }: Props) {
     },
   });
 
-  const { enableVideo, isVideoOn, track } = useLocalVideo();
+  const { enableVideo, isVideoOn, stream } = useLocalVideo();
   const { peerIds } = usePeerIds();
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (track && videoRef.current) {
-      videoRef.current.srcObject = new MediaStream([track]);
+    if (stream && videoRef.current) {
+      videoRef.current.srcObject = stream;
     }
-  }, [track]);
+  }, [stream]);
 
   console.log({ peerIds });
 

@@ -6,13 +6,13 @@ type Props = {
 };
 
 const RemotePeer = ({ peerId }: Props) => {
-  const { stream } = useRemoteVideo({ peerId });
+  const { stream, state } = useRemoteVideo({ peerId });
   const vidRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     console.log({ RemotePeer: peerId });
 
-    if (stream && vidRef.current) {
+    if (stream && vidRef.current && state === "playable") {
       console.log("here 1");
 
       vidRef.current.srcObject = stream;
@@ -30,7 +30,7 @@ const RemotePeer = ({ peerId }: Props) => {
         console.error("videoCard() | Error is hapenning...");
       };
     }
-  }, [stream]);
+  }, [stream, state]);
 
   return (
     <div>
