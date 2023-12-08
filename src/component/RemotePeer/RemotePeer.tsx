@@ -7,7 +7,7 @@ type Props = {
 
 const RemotePeer = ({ peerId }: Props) => {
   const { stream, state } = useRemoteVideo({ peerId });
-  const { stream: audioStream } = useRemoteAudio({ peerId });
+  const { stream: audioStream, state: audioState } = useRemoteAudio({ peerId });
   const vidRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -28,10 +28,10 @@ const RemotePeer = ({ peerId }: Props) => {
         console.error("videoCard() | Error is hapenning...");
       };
     }
-  }, [stream, state]);
+  }, [stream]);
 
   useEffect(() => {
-    if (audioStream && audioRef.current) {
+    if (audioStream && audioRef.current && audioState === "playable") {
       audioRef.current.srcObject = audioStream;
 
       audioRef.current.onloadedmetadata = async () => {
@@ -47,7 +47,7 @@ const RemotePeer = ({ peerId }: Props) => {
         console.error("videoCard() | Error is hapenning...");
       };
     }
-  }, [audioStream, state]);
+  }, [audioStream]);
 
   return (
     <div>
