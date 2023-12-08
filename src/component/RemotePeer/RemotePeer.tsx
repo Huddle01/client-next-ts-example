@@ -1,4 +1,4 @@
-import { useRemoteVideo } from "@huddle01/react/hooks";
+import { useRemoteAudio, useRemoteVideo } from "@huddle01/react/hooks";
 import React, { useEffect, useRef } from "react";
 
 type Props = {
@@ -7,7 +7,9 @@ type Props = {
 
 const RemotePeer = ({ peerId }: Props) => {
   const { stream, state } = useRemoteVideo({ peerId });
+  const { stream: audioStream } = useRemoteAudio({ peerId });
   const vidRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     console.log({ RemotePeer: peerId });
@@ -17,20 +19,39 @@ const RemotePeer = ({ peerId }: Props) => {
 
       vidRef.current.srcObject = stream;
 
-      vidRef.current?.play();
-      // vidRef.current.onloadedmetadata = async () => {
-      //   try {
-      //     console.log("here 2");
-      //   } catch (error) {
-      //     console.error(error);
-      //   }
-      // };
+      vidRef.current.onloadedmetadata = async () => {
+        try {
+          console.log("here 2");
+          vidRef.current?.play();
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
       vidRef.current.onerror = () => {
         console.error("videoCard() | Error is hapenning...");
       };
     }
   }, [stream, state]);
+
+  useEffect(() => {
+    if (audioStream && audioRef.current) {
+      audioRef.current.srcObject = audioStream;
+
+      audioRef.current.onloadedmetadata = async () => {
+        try {
+          console.log("here 2");
+          audioRef.current?.play();
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      audioRef.current.onerror = () => {
+        console.error("videoCard() | Error is hapenning...");
+      };
+    }
+  }, [audioStream, state]);
 
   return (
     <div>
@@ -40,6 +61,7 @@ const RemotePeer = ({ peerId }: Props) => {
         muted
         className="border-2 rounded-xl border-blue-400 aspect-video"
       />
+      <audio ref={audioRef} autoPlay></audio>
     </div>
   );
 };

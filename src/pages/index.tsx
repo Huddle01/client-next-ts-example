@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import {
+  useLocalAudio,
   useLocalPeer,
   useLocalVideo,
   usePeerIds,
@@ -26,6 +27,8 @@ export default function Home({ token }: Props) {
   });
 
   const { enableVideo, isVideoOn, stream } = useLocalVideo();
+  const { enableAudio, isAudioOn, stream: audioStream } = useLocalAudio();
+
   const { peerIds } = usePeerIds();
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -35,6 +38,8 @@ export default function Home({ token }: Props) {
       videoRef.current.srcObject = stream;
     }
   }, [stream]);
+
+  console.log({ audioStream, isAudioOn });
 
   console.log({ peerIds });
 
@@ -52,7 +57,7 @@ export default function Home({ token }: Props) {
             className="bg-blue-500 p-2 mx-2"
             onClick={async () => {
               await joinRoom({
-                roomId: "kto-qnki-bwd",
+                roomId: "mom-xnkh-lwh",
                 token,
               });
             }}
@@ -67,19 +72,18 @@ export default function Home({ token }: Props) {
           >
             enableVideo
           </button>
+          <button
+            className="bg-blue-500 p-2 mx-2"
+            onClick={async () => {
+              await enableAudio();
+            }}
+          >
+            enableAudio
+          </button>
         </div>
       </div>
 
       <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        {/* <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        /> */}
-
         {isVideoOn && (
           <video
             ref={videoRef}
@@ -101,8 +105,9 @@ export default function Home({ token }: Props) {
 
 export const getServerSideProps = async () => {
   const accessToken = new AccessToken({
-    apiKey: process.env.API_KEY!,
-    roomId: process.env.ROOM_ID!,
+    apiKey: "zMQHa6hH5hGrxfwYZp7z8I-1lWScI7UA",
+    roomId: "mom-xnkh-lwh",
+
     role: Role.HOST,
     permissions: {
       admin: true,
@@ -120,7 +125,7 @@ export const getServerSideProps = async () => {
     options: {
       metadata: {
         // you can add any custom attributes here which you want to associate with the user
-        walletAddress: "axit.eth",
+        walletAddress: "0x29f54719E88332e70550cf8737293436E9d7b10b",
       },
     },
   });

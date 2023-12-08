@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import { HuddleClient, HuddleProvider } from "@huddle01/react";
 
 const huddleClient = new HuddleClient({
-  projectId: process.env.NEXT_PUBLIC_HUDDLE_PROJECT_ID || "",
+  projectId: "zMQHa6hH5hGrxfwYZp7z8I-1lWScI7UA",
   options: {
     activeSpeakers: {
       size: 8,
