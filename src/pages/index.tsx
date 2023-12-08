@@ -19,7 +19,7 @@ export default function Home({ token }: Props) {
       console.log("onPeerJoin", peer);
     },
   });
-  const { enableVideo, isVideoOn, stream } = useLocalVideo();
+  const { enableVideo, disableVideo, isVideoOn, stream } = useLocalVideo();
   const { peerIds } = usePeerIds();
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -52,12 +52,20 @@ export default function Home({ token }: Props) {
             joinRoom
           </button>
           <button
-            className="bg-blue-500 p-2"
+            className="bg-blue-500 p-2 mx-2"
             onClick={async () => {
               await enableVideo();
             }}
           >
             enableVideo
+          </button>
+          <button
+            className="bg-blue-500 p-2 mx-2"
+            onClick={async () => {
+              await disableVideo();
+            }}
+          >
+            disableVideo
           </button>
         </div>
       </div>
