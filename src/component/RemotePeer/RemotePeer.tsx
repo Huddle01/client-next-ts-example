@@ -12,11 +12,7 @@ const RemotePeer = ({ peerId }: Props) => {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    console.log({ RemotePeer: peerId });
-
     if (stream && vidRef.current && state === "playable") {
-      console.log("here 1");
-
       vidRef.current.srcObject = stream;
 
       vidRef.current.onloadedmetadata = async () => {
@@ -59,7 +55,7 @@ const RemotePeer = ({ peerId }: Props) => {
         ref={vidRef}
         autoPlay
         muted
-        className="border-2 rounded-xl border-blue-400 aspect-video"
+        className="border-2 rounded-xl border-white-400 aspect-video"
       />
       <audio ref={audioRef} autoPlay></audio>
     </div>
