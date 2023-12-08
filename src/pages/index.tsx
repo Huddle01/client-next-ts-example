@@ -44,12 +44,12 @@ export default function Home({ token }: Props) {
             className="bg-blue-500 p-2 mx-2"
             onClick={async () => {
               await joinRoom({
-                roomId: "kto-qnki-bwd",
+                roomId: "chq-anzn-chw",
                 token,
               });
             }}
           >
-            joinRoom
+            Join Room
           </button>
           <button
             className="bg-blue-500 p-2 mx-2"
@@ -57,7 +57,7 @@ export default function Home({ token }: Props) {
               await enableVideo();
             }}
           >
-            enableVideo
+            Enable Video
           </button>
           <button
             className="bg-blue-500 p-2 mx-2"
@@ -65,7 +65,7 @@ export default function Home({ token }: Props) {
               await disableVideo();
             }}
           >
-            disableVideo
+            Disable Video
           </button>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function Home({ token }: Props) {
         )}
       </div>
 
-      <div className="mb-32 grid gap-2 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+      <div className="mt-4 mb-32 grid gap-2 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
         {peerIds.map((peerId) =>
           peerId ? <RemotePeer key={peerId} peerId={peerId} /> : null
         )}
