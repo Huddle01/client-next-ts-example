@@ -1,6 +1,6 @@
-import { TPeerMetadata } from "@/pages";
-import { useRemotePeer } from "@huddle01/react/hooks";
-import { TMessage } from "./ChatBox";
+import { TPeerMetadata } from '@/utils/types';
+import { useRemotePeer } from '@huddle01/react/hooks';
+import { TMessage } from './ChatBox';
 
 interface Props {
   message: TMessage;
@@ -11,7 +11,9 @@ function RemoteMessageBubble({ message }: Props) {
 
   return (
     <div className="w-full items-start flex flex-col bg-blue-400 p-2">
-      <span className="text-gray-500 text-xs">{metadata?.displayName}</span>
+      <span className="text-white bg-gray-500 text-xs">
+        {metadata?.displayName}
+      </span>
       <span className="text-white text-sm">{message.text}</span>
     </div>
   );

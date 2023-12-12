@@ -1,4 +1,4 @@
-import { TPeerMetadata } from "@/pages";
+import { TPeerMetadata } from "@/utils/types";
 import { useLocalPeer } from "@huddle01/react/hooks";
 import { TMessage } from "./ChatBox";
 
