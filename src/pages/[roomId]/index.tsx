@@ -131,7 +131,8 @@ export default function Home({ token }: Props) {
                         `/api/startRecording?roomId=${router.query.roomId}`
                       );
 
-                  console.log(status);
+                  const data = await status.json();
+                  console.log({ data });
                   setIsRecording(!isRecording);
                 }}
               >
@@ -145,14 +146,16 @@ export default function Home({ token }: Props) {
       <div className="w-full mt-8 flex gap-4 justify-between items-stretch">
         <div className="flex-1 justify-between items-center flex flex-col">
           <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-            <div className="flex gap-2">
+            <div className="relative flex gap-2">
               {isVideoOn && (
-                <video
-                  ref={videoRef}
-                  className="w-1/2 mx-auto border-2 rounded-xl border-blue-400"
-                  autoPlay
-                  muted
-                />
+                <div>
+                  <video
+                    ref={videoRef}
+                    className="w-1/2 mx-auto border-2 rounded-xl border-blue-400"
+                    autoPlay
+                    muted
+                  />
+                </div>
               )}
               {shareStream && (
                 <video
