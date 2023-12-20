@@ -1,6 +1,6 @@
-import ChatBox from '@/component/ChatBox/ChatBox';
-import RemotePeer from '@/component/RemotePeer/RemotePeer';
-import { TPeerMetadata } from '@/utils/types';
+import ChatBox from "@/component/ChatBox/ChatBox";
+import RemotePeer from "@/component/RemotePeer/RemotePeer";
+import { TPeerMetadata } from "@/utils/types";
 import {
   useLocalAudio,
   useLocalPeer,
@@ -8,20 +8,20 @@ import {
   useLocalVideo,
   usePeerIds,
   useRoom,
-} from '@huddle01/react/hooks';
-import { AccessToken, Role } from '@huddle01/server-sdk/auth';
-import { Inter } from 'next/font/google';
-import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+} from "@huddle01/react/hooks";
+import { AccessToken, Role } from "@huddle01/server-sdk/auth";
+import { Inter } from "next/font/google";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 type Props = {
   token: string;
 };
 
 export default function Home({ token }: Props) {
-  const [displayName, setDisplayName] = useState<string>('');
+  const [displayName, setDisplayName] = useState<string>("");
   const videoRef = useRef<HTMLVideoElement>(null);
   const screenRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
@@ -29,11 +29,11 @@ export default function Home({ token }: Props) {
 
   const { joinRoom, state } = useRoom({
     onJoin: (room) => {
-      console.log('onJoin', room);
+      console.log("onJoin", room);
       updateMetadata({ displayName });
     },
     onPeerJoin: (peer) => {
-      console.log('onPeerJoin', peer);
+      console.log("onPeerJoin", peer);
     },
   });
   const { enableVideo, isVideoOn, stream, disableVideo } = useLocalVideo();
@@ -64,10 +64,10 @@ export default function Home({ token }: Props) {
           <code className="font-mono font-bold">{state}</code>
         </p>
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          {state === 'idle' && (
+          {state === "idle" && (
             <>
               <input
-                disabled={state !== 'idle'}
+                disabled={state !== "idle"}
                 placeholder="Display Name"
                 type="text"
                 className="border-2 border-blue-400 rounded-lg p-2 mx-2 bg-black text-white"
@@ -91,7 +91,7 @@ export default function Home({ token }: Props) {
             </>
           )}
 
-          {state === 'connected' && (
+          {state === "connected" && (
             <>
               <button
                 className="bg-blue-500 p-2 mx-2 rounded-lg"
@@ -99,7 +99,7 @@ export default function Home({ token }: Props) {
                   isVideoOn ? await disableVideo() : await enableVideo();
                 }}
               >
-                {isVideoOn ? 'Disable Video' : 'Enable Video'}
+                {isVideoOn ? "Disable Video" : "Enable Video"}
               </button>
               <button
                 className="bg-blue-500 p-2 mx-2 rounded-lg"
@@ -107,7 +107,7 @@ export default function Home({ token }: Props) {
                   isAudioOn ? await disableAudio() : await enableAudio();
                 }}
               >
-                {isAudioOn ? 'Disable Audio' : 'Enable Audio'}
+                {isAudioOn ? "Disable Audio" : "Enable Audio"}
               </button>
               <button
                 className="bg-blue-500 p-2 mx-2 rounded-lg"
@@ -117,7 +117,7 @@ export default function Home({ token }: Props) {
                     : await startScreenShare();
                 }}
               >
-                {shareStream ? 'Disable Screen' : 'Enable Screen'}
+                {shareStream ? "Disable Screen" : "Enable Screen"}
               </button>
               <button
                 className="bg-blue-500 p-2 mx-2 rounded-lg"
@@ -135,7 +135,7 @@ export default function Home({ token }: Props) {
                   setIsRecording(!isRecording);
                 }}
               >
-                {isRecording ? 'Stop Recording' : 'Start Recording'}
+                {isRecording ? "Stop Recording" : "Start Recording"}
               </button>
             </>
           )}
@@ -175,7 +175,7 @@ export default function Home({ token }: Props) {
             )}
           </div>
         </div>
-        {state === 'connected' && <ChatBox />}
+        {state === "connected" && <ChatBox />}
       </div>
     </main>
   );
@@ -203,8 +203,6 @@ export const getServerSideProps = async (ctx: any) => {
   });
 
   const token = await accessToken.toJwt();
-
-  console.log(token);
 
   return {
     props: { token },
