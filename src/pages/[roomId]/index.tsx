@@ -94,6 +94,7 @@ export default function Home({ token }: Props) {
           {state === "connected" && (
             <>
               <button
+                type="button"
                 className="bg-blue-500 p-2 mx-2 rounded-lg"
                 onClick={async () => {
                   isVideoOn ? await disableVideo() : await enableVideo();
@@ -102,6 +103,7 @@ export default function Home({ token }: Props) {
                 {isVideoOn ? "Disable Video" : "Enable Video"}
               </button>
               <button
+                type="button"
                 className="bg-blue-500 p-2 mx-2 rounded-lg"
                 onClick={async () => {
                   isAudioOn ? await disableAudio() : await enableAudio();
@@ -110,6 +112,7 @@ export default function Home({ token }: Props) {
                 {isAudioOn ? "Disable Audio" : "Enable Audio"}
               </button>
               <button
+                type="button"
                 className="bg-blue-500 p-2 mx-2 rounded-lg"
                 onClick={async () => {
                   shareStream
@@ -120,6 +123,7 @@ export default function Home({ token }: Props) {
                 {shareStream ? "Disable Screen" : "Enable Screen"}
               </button>
               <button
+                type="button"
                 className="bg-blue-500 p-2 mx-2 rounded-lg"
                 onClick={async () => {
                   const status = isRecording
@@ -181,11 +185,12 @@ export default function Home({ token }: Props) {
   );
 }
 
-export const getServerSideProps = async (ctx: any) => {
-  const accessToken = new AccessToken({
-    apiKey: process.env.API_KEY!,
-    roomId: ctx.params.roomId,
+import { GetServerSidePropsContext } from "next";
 
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const accessToken = new AccessToken({
+    apiKey: process.env.API_KEY || "",
+    roomId: ctx.params?.roomId?.toString() || "",
     role: Role.HOST,
     permissions: {
       admin: true,
